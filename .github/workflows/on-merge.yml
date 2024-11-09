@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Print GitHub Event Payload
         env:
-          GITHUB_EVENT_PAYLOAD: ${{ toJson(github.event) }}
+          GITHUB_EVENT_PAYLOAD: ${{ toJson(github) }}
         run: |
           echo "GitHub Event Payload:"
           echo "$GITHUB_EVENT_PAYLOAD"
