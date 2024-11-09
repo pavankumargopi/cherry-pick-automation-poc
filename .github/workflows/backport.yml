@@ -40,5 +40,6 @@ jobs:
       - name: Run backport automation Python script
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: "cherry-pick-automation-poc"
         run: |
           python ./backport.py "123" "2.0" "${{ secrets.GITHUB_TOKEN }}"
