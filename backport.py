@@ -45,8 +45,12 @@ def create_pull_request(github_token, owner, repo, backport_branch, target_branc
         ]
 
         result = subprocess.run(command, capture_output=True, text=True)
-
-        print(f"Created pull request: result")
+        if result.returncode != 0:
+            print(f"Failed to create PR: {result.stderr}")
+            sys.exit(1)
+        print(f"Failed to create PR: {result}")
+        print(f"Created PR successfully: {result.stdout}")
+    
     except Exception as e:
         print(f"Error creating PR: {str(e)}")
         sys.exit(1)
