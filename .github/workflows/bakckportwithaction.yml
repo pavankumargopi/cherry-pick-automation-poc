@@ -3,7 +3,10 @@ name: Automatic backport action
 on:
   pull_request_target:
     types: ["labeled", "closed"]
-
+permissions:
+  contents: read
+  packages: write
+  
 jobs:
   backport:
     name: Backport PR
