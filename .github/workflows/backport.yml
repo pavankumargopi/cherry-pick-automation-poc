@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and PRs
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -20,16 +22,19 @@ jobs:
       - name: Install cherry-picker
         run: pip install cherry-picker
 
+      - name: Get Commit SHA
+        id: get_commit_sha
+        run: |
+          # Extract the commit SHA associated with the PR
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          COMMIT_SHA=$(git log -1 --format="%H" FETCH_HEAD)
+          echo "COMMIT_SHA=$COMMIT_SHA" >> $GITHUB_ENV
+
       - name: Backport commit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Get the PR number and target branch for the backport
-          PR_NUMBER=$(echo "${{ github.event.pull_request.number }}")
           TARGET_BRANCH="v2-1-stable"  # Customize target branch as needed
-
-          # Get the commit SHA from the PR and use cherry-picker to backport
-          COMMIT_SHA=$(git rev-parse "refs/pull/${PR_NUMBER}/merge")
 
           # Run cherry-picker with the commit SHA and target branch
           cherry_picker $COMMIT_SHA $TARGET_BRANCH
