@@ -28,8 +28,11 @@ jobs:
           PR_NUMBER=$(echo "${{ github.event.pull_request.number }}")
           TARGET_BRANCH="v2-1-stable"  # Customize target branch as needed
 
-          # Run cherry-picker to backport the commit
-          cherry_picker $PR_NUMBER --branch $TARGET_BRANCH
+          # Get the commit SHA from the PR and use cherry-picker to backport
+          COMMIT_SHA=$(git rev-parse "refs/pull/${PR_NUMBER}/merge")
+
+          # Run cherry-picker with the commit SHA and target branch
+          cherry_picker $COMMIT_SHA $TARGET_BRANCH
 
       - name: Push changes to target branch
         run: |
