@@ -64,7 +64,7 @@ def main():
     # Set up GitHub and repo
     g = Github(github_token)
     repo = g.get_repo(os.getenv("GITHUB_REPOSITORY"))
-
+    repo = "cherry-pick-automation-poc"#g.get_repo(os.getenv("GITHUB_REPOSITORY"))
     # Set up local Git repo
     repo_path = os.getcwd()
     local_repo = Repo(repo_path)
