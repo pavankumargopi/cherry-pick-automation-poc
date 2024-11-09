@@ -49,4 +49,4 @@ jobs:
 
       - name: Push changes to target branch
         run: |
-          git push origin $TARGET_BRANCH
+          git push
