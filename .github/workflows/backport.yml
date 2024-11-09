@@ -36,16 +36,9 @@ jobs:
           PR_NUMBER="${{ github.event.pull_request.number }}"
           COMMIT_SHA=$(git log -1 --format="%H" FETCH_HEAD)
           echo "COMMIT_SHA=$COMMIT_SHA" >> $GITHUB_ENV
-
-      - name: Backport commit
+          
+      - name: Run backport automation Python script
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TARGET_BRANCH="v2-1-stable"  # Customize target branch as needed
-
-          # Run cherry-picker with the commit SHA and target branch
-          cherry_picker 3253d691f0f5fec668a25ec5932187f9600b3440 2.0
-
-      - name: Push changes to target branch
-        run: |
-          git push
+          python ./backport.py "123" "2.0" "${{ secrets.GITHUB_TOKEN }}"
