@@ -58,7 +58,7 @@ def main():
     # if not backport_branch:
     #     print("Backport branch not found.")
     #     sys.exit(1)
-
+    backport_branch = "backport-3253d69-2.0"
     print(f"Backport branch: {backport_branch}")
 
     # # Create and push the backport branch
