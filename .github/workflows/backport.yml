@@ -21,6 +21,11 @@ jobs:
 
       - name: Install cherry-picker
         run: pip install cherry-picker
+        
+      - name: Set Git User Identity
+        run: |
+          git config user.email "github-actions@github.com"
+          git config user.name "GitHub Actions"
 
       - name: Get Commit SHA
         id: get_commit_sha
