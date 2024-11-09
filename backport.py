@@ -71,8 +71,11 @@ def main():
 
     # Run cherry-picker
     print("Running cherry-picker...")
-    cherry_pick_log = run_command(f"cherry_picker 1aa9c4f14487efb14e4c2814ae1b04dbc407ca2a 2.0")
-    print(cherry_pick_log)
+    try:
+        cherry_pick_log = run_command(f"cherry_picker 1aa9c4f14487efb14e4c2814ae1b04dbc407ca2a 2.0")
+        print(cherry_pick_log)
+    except Exception as e:
+        print(f"cherry pick failed: {cherry_pick_log}")
 
     # Extract backport branch from cherry-pick log
     backport_branch = None
