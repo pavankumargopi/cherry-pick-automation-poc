@@ -9,7 +9,6 @@ permissions:
   
 jobs:
   backport:
-    if: github.event.label.name == 'backport-to-v2-1-stable' # Customize label name as needed
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
