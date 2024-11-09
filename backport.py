@@ -1,3 +1,4 @@
+import json
 import subprocess
 import sys
 import os
@@ -15,16 +16,37 @@ def run_command(command):
     return result.stdout
 
 
-def create_pull_request(repo, backport_branch, target_branch, pr_title, pr_body):
+def create_pull_request(github_token, owner, repo, backport_branch, target_branch, pr_title, pr_body):
     """Create a pull request on GitHub."""
     try:
-        pr = repo.create_pull(
-            title=pr_title,
-            body=pr_body,
-            base=target_branch,
-            head=backport_branch
-        )
-        print(f"Created pull request: {pr.html_url}")
+        url = f"https://api.github.com/repos/{owner}/{repo}/pulls"
+
+        headers = {
+            "Accept": "application/vnd.github+json",
+            "Authorization": f"Bearer {github_token}",
+            "X-GitHub-Api-Version": "2022-11-28"
+        }
+
+        payload = {
+            "title": pr_title,
+            "body": pr_body,
+            "head": backport_branch,
+            "base": target_branch
+        }
+
+        # Use curl to send the POST request to GitHub API
+        command = [
+            "curl", "-L", "-X", "POST",
+            "-H", f"Accept: application/vnd.github+json",
+            "-H", f"Authorization: Bearer {github_token}",
+            "-H", "X-GitHub-Api-Version: 2022-11-28",
+            url,
+            "-d", json.dumps(payload)
+        ]
+
+        result = subprocess.run(command, capture_output=True, text=True)
+
+        print(f"Created pull request: result")
     except Exception as e:
         print(f"Error creating PR: {str(e)}")
         sys.exit(1)
@@ -69,7 +91,8 @@ def main():
     # Create the pull request
     pr_title = f"Backport of PR #{pr_number} to {target_branch}"
     pr_body = f"Automated backport of PR #{pr_number} from main to {target_branch}."
-    create_pull_request(repo, backport_branch, target_branch, pr_title, pr_body)
+    print(f"Creating pull request... with title:{pr_title} repo: {repo} backport_branch: {backport_branch} target_branch: {target_branch} pr_title: {pr_title} pr_body: {pr_body}")
+    create_pull_request(github_token, "gopidesupavan", repo, backport_branch, target_branch, pr_title, pr_body)
 
     # Optionally, delete the backport branch after PR is created
     # print("Deleting backport branch...")
