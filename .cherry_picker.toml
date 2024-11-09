@@ -1,0 +1,4 @@
+team = "test"
+repo = "gopidesupavan/cherry-pick-automation-poc"
+fix_commit_msg = false
+default_branch = "main"
