@@ -1,0 +1,19 @@
+name: Print GitHub Event Payload on PR Close
+
+on:
+  pull_request:
+    types:
+      - closed
+      
+jobs:
+  print_payload_if_merged:
+    if: github.event.pull_request.merged == true  # Run only if the PR was merged
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print GitHub Event Payload
+        env:
+          GITHUB_EVENT_PAYLOAD: ${{ toJson(github.event) }}
+        run: |
+          echo "GitHub Event Payload:"
+          echo "$GITHUB_EVENT_PAYLOAD"
