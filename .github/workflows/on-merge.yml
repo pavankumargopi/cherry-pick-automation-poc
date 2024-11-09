@@ -1,13 +1,12 @@
 name: Print GitHub Event Payload on PR Close
 
 on:
-  pull_request:
-    types:
-      - closed
+  push:
+    branches:
+      - 'main'
       
 jobs:
   print_payload_if_merged:
-    if: github.event.pull_request.merged == true  # Run only if the PR was merged
     runs-on: ubuntu-latest
 
     steps:
