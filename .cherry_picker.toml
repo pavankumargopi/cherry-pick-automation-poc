@@ -1,4 +1,5 @@
 team = "test"
 repo = "cherry-pick-automation-poc"
-fix_commit_msg = false
+"check_sha"= "b87501e4c83504d6f4c48121eed8e4a28fb948c6"
+fix_commit_msg = true
 default_branch = "main"
