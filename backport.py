@@ -72,7 +72,7 @@ def main():
     # Run cherry-picker
     print("Running cherry-picker...")
     try:
-        cherry_pick_log = run_command(f"cherry_picker 1aa9c4f14487efb14e4c2814ae1b04dbc407ca2a 2.0")
+        cherry_pick_log = run_command(f"cherry_picker 046a12c848e3fe95f2c6c497c750d16af9c287f1 2.0")
         print(cherry_pick_log)
     except Exception as e:
         print(f"cherry pick failed: {cherry_pick_log}")
