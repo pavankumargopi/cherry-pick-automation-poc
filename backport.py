@@ -71,7 +71,7 @@ def main():
 
     # Run cherry-picker
     print("Running cherry-picker...")
-    cherry_pick_log = run_command(f"cherry_picker 3253d691f0f5fec668a25ec5932187f9600b3440 2.0")
+    cherry_pick_log = run_command(f"cherry_picker 1aa9c4f14487efb14e4c2814ae1b04dbc407ca2a 2.0")
     print(cherry_pick_log)
 
     # Extract backport branch from cherry-pick log
@@ -84,7 +84,7 @@ def main():
     # if not backport_branch:
     #     print("Backport branch not found.")
     #     sys.exit(1)
-    backport_branch = "backport-3253d69-2.0"
+    backport_branch = "backport-1aa9c4f-2.0"
     print(f"Backport branch: {backport_branch}")
 
     # # Create and push the backport branch
