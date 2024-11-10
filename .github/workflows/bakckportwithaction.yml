@@ -1,17 +1,17 @@
 name: Automatic backport action
 
 on:
-  push:
+   pull_request:
+    types: ["labeled", "closed"]
     branches: ['main']
 permissions:
   contents: read
   packages: write
-  pull-requests: write
-  checks: write
-  
+
 jobs:
   backport:
     name: Backport PR
+    if: github.event.pull_request.merged == true && !(contains(github.event.pull_request.labels.*.name, 'backport'))
     runs-on: ubuntu-latest
     steps:
       - name: Echo GitHub Context
