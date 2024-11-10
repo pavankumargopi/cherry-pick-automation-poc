@@ -1,7 +1,7 @@
 name: RandomeError
 on:
   push:
-    branches: ["main]
+    branches: ["main"]
 
 jobs:
   display-github-context:
