@@ -1,0 +1,11 @@
+name: RandomeError
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  display-github-context:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo GitHub Context
+        run: echo "${{ toJson(github) }}"
