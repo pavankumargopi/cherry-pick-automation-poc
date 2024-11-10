@@ -16,6 +16,8 @@ jobs:
     if: github.event.pull_request.merged == true && !(contains(github.event.pull_request.labels.*.name, 'backport'))
     runs-on: ubuntu-latest
     steps:
+      - name: Echo GitHub Context
+        run: echo "${{ toJson(github) }}"
       - name: Backport Action
         uses: sorenlouv/backport-github-action@ad888e978060bc1b2798690dd9d03c4036560947
         with:
