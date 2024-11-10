@@ -2,7 +2,6 @@ name: Automatic backport action
 
 on:
   push:
-    types: ["labeled", "closed"]
     branches: ['main']
 permissions:
   contents: read
