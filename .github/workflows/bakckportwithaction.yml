@@ -3,6 +3,7 @@ name: Automatic backport action
 on:
   pull_request:
     types: ["labeled", "closed"]
+    branches: ['main']
 permissions:
   contents: read
   packages: write
