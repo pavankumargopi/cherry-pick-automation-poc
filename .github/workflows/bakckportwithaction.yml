@@ -1,22 +1,21 @@
 name: Automatic backport action
 
 on:
-   pull_request_target:
-    types: ["labeled", "closed"]
+  pull_request_target:
+    types: ['labeled', 'closed']
     branches: ['main']
 permissions:
   contents: write
   pull-requests: write
-
 jobs:
   backport:
     name: Backport PR
-    if: github.event.pull_request.merged == true && contains(join(github.event.pull_request.labels.*.name, ' '), 'backport-to-v')
+    if: >
+      github.event.pull_request.merged == true &&
+      contains(join(github.event.pull_request.labels.*.name, ' '), 'backport-to-v')
     runs-on: ubuntu-latest
     steps:
-      - name: Echo GitHub Context
-        run: echo "${{ toJson(github) }}"
-      - name: Backport Action
+      - name: Execute Backport Action
         uses: sorenlouv/backport-github-action@ad888e978060bc1b2798690dd9d03c4036560947
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -25,8 +24,8 @@ jobs:
       - name: Info log
         if: ${{ success() }}
         run: cat ~/.backport/backport.info.log
-        
+
       - name: Debug log
         if: ${{ failure() }}
-        run: cat ~/.backport/backport.debug.log        
+        run: cat ~/.backport/backport.debug.log    
           
