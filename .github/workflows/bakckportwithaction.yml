@@ -9,7 +9,7 @@ permissions:
   pull-requests: write
 jobs:
   backport:
-    name: Backport ${{ github.event.pull_request.number }}
+    name: "Backport ${{ github.event.pull_request.number }}"
     if: >
       github.event.pull_request.merged == true &&
       contains(join(github.event.pull_request.labels.*.name, ' '), 'backport-to-v')
@@ -20,6 +20,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           auto_backport_label_prefix: backport-to-
+          persist-credentials: false
 
       - name: Info log
         if: ${{ success() }}
