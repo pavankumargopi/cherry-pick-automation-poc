@@ -9,7 +9,7 @@ permissions:
   pull-requests: write
 jobs:
   backport:
-    name: Backport ${{ github.event.pull_request.number }}
+    name: "Backport ${{ github.event.pull_request.number }}"
     if: >
       github.event.pull_request.merged == true &&
       contains(join(github.event.pull_request.labels.*.name, ' '), 'backport-to-v')
