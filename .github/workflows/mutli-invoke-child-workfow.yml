@@ -1,0 +1,22 @@
+name: Multi Invoke Child Workflow
+
+on:
+  workflow_call:
+    inputs:
+      commit-sha:
+        description: "Commit SHA to operate on"
+        required: true
+        type: string
+      label:
+        description: "Label starting with backport-to-"
+        required: true
+        type: string
+
+jobs:
+  process-backport:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print commit SHA and label
+        run: |
+          echo "Processing commit: ${{ inputs.commit-sha }}"
+          echo "Processing label: ${{ inputs.label }}"
