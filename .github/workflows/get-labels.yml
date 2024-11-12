@@ -35,20 +35,19 @@ jobs:
                 const backportLabels = pr.labels.filter(label => label.name.startsWith('backport-to-')).map(label => label.name);
                 console.log(`PR Number: ${pr.number}`);
                 console.log(`Backport Labels: ${backportLabels.join(',')}`);
-                core.setOutput('labels', backportLabels.join(','));
+                core.setOutput('labels', JSON.stringify(backportLabels));
                 
             } else {
                 console.log('No pull request found for this commit.');
-                core.setOutput('labels', '');
+                core.setOutput('labels', '[]');
             }
 
   process-labels:
     needs: get-pr-info
     runs-on: ubuntu-latest
-    if: needs.get-pr-info.outputs.labels != ''
     strategy:
       matrix:
-        label: ${{ needs.get-pr-info.outputs.labels && needs.get-pr-info.outputs.labels.split(',') }}
+        label: ${{ fromJSON(needs.get-pr-info.outputs.labels) }}
       fail-fast: false
     steps:
       - name: Process Label
