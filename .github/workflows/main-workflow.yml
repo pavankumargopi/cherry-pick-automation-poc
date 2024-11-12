@@ -1,0 +1,27 @@
+# .github/workflows/main-workflow.yml
+name: Main Workflow
+
+on: 
+  workflow_dispatch:
+    inputs:
+      targetBranch:
+        description: 'Target branch'
+        required: true
+        type: string
+      pullRequest:
+        description: 'Pull request'
+        required: true 
+        type: string
+      dryRun:
+        description: 'Dry run'
+        required: false
+        default: "true" 
+        type: string
+
+jobs:
+  call-reusable-workflow:
+    uses: ./.github/workflows/configurable-backport.yml  # Reference the reusable workflow file
+    with:
+      targetBranch: ${{ inputs.targetBranch }}
+      pullRequest: ${{ inputs.targetBranch }}
+      dryRun: ${{ inputs.dryRun }}
