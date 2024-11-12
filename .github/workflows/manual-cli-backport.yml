@@ -1,6 +1,7 @@
 name: Manual CLI Backport
 
 on:
+  workflow_dispatch:
   workflow_call:
     inputs:
       commit-sha:
