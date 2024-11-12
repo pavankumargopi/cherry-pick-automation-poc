@@ -44,6 +44,7 @@ jobs:
 
   process-labels:
     needs: get-pr-info
+    if: ${{ needs.get-pr-info.outputs.labels != '[]' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
