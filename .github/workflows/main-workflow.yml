@@ -20,7 +20,7 @@ on:
 
 jobs:
   call-reusable-workflow:
-    uses: .github/workflows/configurable-backport.yml  # Reference the reusable workflow file
+    uses: ./.github/workflows/configurable-backport.yml  # Reference the reusable workflow file
     with:
       targetBranch: ${{ inputs.targetBranch }}
       pullRequest: ${{ inputs.targetBranch }}
