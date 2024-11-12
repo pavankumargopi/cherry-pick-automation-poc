@@ -40,10 +40,5 @@ jobs:
                 console.log('No pull request found for this commit.');
                 return { labels: [] };
             }
-                
-  printing:
-    runs-on: ubuntu-latest
-    needs: get-pr-info
-    steps:
       - name: Print labels
-        run: echo "${{ needs.get-pr-info.outputs.labels }}"
+        run: echo "${{ needs.get_pr.outputs.labels }}"
