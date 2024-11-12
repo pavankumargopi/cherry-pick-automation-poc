@@ -51,7 +51,7 @@ jobs:
 
       - name: Run backport
         run: |
-          backport --access-token "${GITHUB_TOKEN}" --branch ${{ inputs.target-branch }} --sha ${{ inputs.commit-sha }} --repo ${{ inputs.base-repo }}
+          backport --branch "${{inputs.target-branch}}" --access-token "${GITHUB_TOKEN}" --sha "${{inputs.commit-sha}}" --repo "${{inputs.base-repo}}"
           cat /home/runner/.backport/backport.info.log
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
