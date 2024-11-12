@@ -46,6 +46,6 @@ jobs:
         run: npm install -g backport
 
       - name: Run backport
-        run: backport --branch ${{ inputs.target-branch }} --sha ${{ inputs.commit-sha }} --repo ${{ inputs.base-repo }} --token ${{ secrets.GITHUB_TOKEN }}
+        run: backport --branch ${{ inputs.target-branch }} --sha ${{ inputs.commit-sha }} --repo ${{ inputs.base-repo }} --access-token ${{ secrets.GITHUB_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
