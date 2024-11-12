@@ -10,7 +10,7 @@ jobs:
   get-pr-info:
     runs-on: ubuntu-latest
     outputs:
-      labels: ${{ steps.get_labels.outputs.labels }}
+      labels: ${{ steps.get_pr.outputs.labels }}
     steps:
       - name: Get commit SHA
         id: get_sha
@@ -35,12 +35,22 @@ jobs:
                 const backportLabels = pr.labels.filter(label => label.name.startsWith('backport-to-')).map(label => label.name);
                 console.log(`PR Number: ${pr.number}`);
                 console.log(`Backport Labels: ${backportLabels.join(',')}`);
-                return { labels: backportLabels };
+                core.setOutput('labels', backportLabels.join(','));
+                
             } else {
                 console.log('No pull request found for this commit.');
-                return { labels: [] };
+                core.setOutput('labels', '');
             }
-      - name: env
-        run: printenv
-        env:
-          PR_LABELS: ${{fromJson(steps.get_pr.outputs.result)['labels']}}
+
+  process-labels:
+    needs: get-pr-info
+    runs-on: ubuntu-latest
+    if: needs.get-pr-info.outputs.labels != ''
+    strategy:
+      matrix:
+        label: ${{ needs.get-pr-info.outputs.labels && needs.get-pr-info.outputs.labels.split(',') }}
+      fail-fast: false
+    steps:
+      - name: Process Label
+        run: |
+          echo "Processing label: ${{ matrix.label }}"
