@@ -28,7 +28,7 @@ jobs:
             const { data: pullRequest } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                commit_sha: `${GITHUB_SHA}`
+                commit_sha: process.env.GITHUB_SHA
             });
             if (pullRequest.length > 0) {
                 const pr = pullRequest[0];
