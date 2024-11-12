@@ -1,5 +1,5 @@
-# .github/workflows/parent-workflow.yml
-name: Parent Workflow
+
+name: Label Finder Workflow
 
 on:
   push:
@@ -9,45 +9,40 @@ on:
 jobs:
   get-pr-info:
     runs-on: ubuntu-latest
+    outputs:
+      labels: ${{ steps.get_labels.outputs.labels }}
     steps:
-      # Step 1: Get the commit SHA
       - name: Get commit SHA
         id: get_sha
         run: echo "COMMIT_SHA=${GITHUB_SHA}" >> $GITHUB_ENV
 
-      # Step 2: Get pull request number associated with this commit
       - name: Get PR number
         id: get_pr
+        uses: actions/github-script@v7
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          PR_NUMBER=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-            "https://api.github.com/repos/${{ github.repository }}/commits/${GITHUB_SHA}/pulls" \
-            | jq '.[0].number')
-          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
-
-      # Step 3: Get labels from the pull request
-      - name: Get PR labels
-        id: get_labels
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          LABELS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}/labels" \
-            | jq -r '.[].name')
-          echo "Labels found: $LABELS"
-          BACKPORT_LABELS=$(echo "$LABELS" | grep -o 'backport-to-.*' || true)
-          echo "BACKPORT_LABELS=$BACKPORT_LABELS"
-          echo "::set-output name=labels::$BACKPORT_LABELS"
-  run-multi-child-workflow:
-    needs: get-pr-info
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        label: ${{ fromJson(needs.get-pr-info.outputs.labels) }}
-    steps:
-      - name: Run child workflow with label ${{ matrix.label }}
-        uses: ./.github/workflows/mutli-invoke-child-workfow.yml
         with:
-          commit-sha: ${{ env.COMMIT_SHA }}
-          label: ${{ matrix.label }}
+          script: |
+            const commitHash = process.env.GITHUB_SHA;
+            const { data: pullRequest } = await github.pulls.list({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                head: `${context.repo.owner}:${context.sha}`
+            });
+            if (pullRequest.length > 0) {
+                const pr = pullRequest[0];
+                const backportLabels = pr.labels.filter(label => label.name.startsWith('backport-to-')).map(label => label.name);
+                console.log(`PR Number: ${pr.number}`);
+                console.log(`Backport Labels: ${backportLabels.join(',')}`);
+                return { labels: backportLabels };
+            } else {
+                console.log('No pull request found for this commit.');
+                return { labels: [] };
+            }
+                
+  printing:
+    runs-on: ubuntu-latest
+    needs: get-pr-info
+    steps:
+      - name: Print labels
+        run: echo "${{ needs.get-pr-info.outputs.labels }}"
