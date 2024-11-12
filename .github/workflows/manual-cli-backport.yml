@@ -2,6 +2,21 @@ name: Manual CLI Backport
 
 on:
   workflow_dispatch:
+    inputs:
+      commit-sha:
+        description: "Commit sha to backport."
+        required: true
+        type: string
+      target-branch:
+        description: "Branch to backport to."
+        required: true
+        type: string
+      base-repo:
+        description: "Base repository to backport to."
+        required: false
+        default: "gopidesupavan/cherry-pick-automation-poc"
+        type: string
+        
   workflow_call:
     inputs:
       commit-sha:
