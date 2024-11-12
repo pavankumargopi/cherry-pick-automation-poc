@@ -1,0 +1,58 @@
+name: Manual CLI Backport
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit-sha:
+        description: "Commit sha to backport."
+        required: true
+        type: string
+      target-branch:
+        description: "Branch to backport to."
+        required: true
+        type: string
+      base-repo:
+        description: "Base repository to backport to."
+        required: false
+        default: "gopidesupavan/cherry-pick-automation-poc"
+        type: string
+        
+  workflow_call:
+    inputs:
+      commit-sha:
+        description: "Commit sha to backport."
+        required: true
+        type: string
+      target-branch:
+        description: "Branch to backport to."
+        required: true
+        type: string
+      base-repo:
+        description: "Base repository to backport to."
+        required: false
+        default: "gopidesupavan/cherry-pick-automation-poc"
+        type: string
+        
+permissions:
+  contents: write
+  pull-requests: write
+  
+jobs:
+  manual-cli-backport:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21
+
+      - name: Install backport CLI
+        run: npm install -g backport
+
+      - name: Run backport
+        run: |
+          backport --branch "${{inputs.target-branch}}" --access-token "${GITHUB_TOKEN}" --noFork --sha "${{inputs.commit-sha}}" --repo "${{inputs.base-repo}}"
+          cat /home/runner/.backport/backport.info.log
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
