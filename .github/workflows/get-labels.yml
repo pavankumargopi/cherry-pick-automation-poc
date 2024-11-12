@@ -1,0 +1,39 @@
+# .github/workflows/parent-workflow.yml
+name: Parent Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  get-pr-info:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Get the commit SHA
+      - name: Get commit SHA
+        id: get_sha
+        run: echo "COMMIT_SHA=${GITHUB_SHA}" >> $GITHUB_ENV
+
+      # Step 2: Get pull request number associated with this commit
+      - name: Get PR number
+        id: get_pr
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUMBER=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+            "https://api.github.com/repos/${{ github.repository }}/commits/${GITHUB_SHA}/pulls" \
+            | jq '.[0].number')
+          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
+
+      # Step 3: Get labels from the pull request
+      - name: Get PR labels
+        id: get_labels
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          LABELS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}/labels" \
+            | jq -r '.[].name')
+          echo "Labels found: $LABELS"
+          echo "BACKPORT_LABELS=$(echo "$LABELS" | grep -o 'backport-to-.*' || true)" >> $GITHUB_ENV
