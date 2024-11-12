@@ -37,3 +37,15 @@ jobs:
             | jq -r '.[].name')
           echo "Labels found: $LABELS"
           echo "BACKPORT_LABELS=$(echo \"$LABELS\" | grep -o 'backport-to-.*' || true)" >> $GITHUB_ENV
+  run-multi-child-workflow:
+    needs: get-pr-info
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        label: ${{ fromJson(env.BACKPORT_LABELS) }}  # Use the labels we found
+    steps:
+      - name: Run child workflow with label ${{ matrix.label }}
+        uses: ./.github/workflows/mutli-invoke-child-workfow.yml
+        with:
+          commit-sha: ${{ env.COMMIT_SHA }}
+          label: ${{ matrix.label }}
