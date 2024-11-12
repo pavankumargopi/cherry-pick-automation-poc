@@ -40,5 +40,10 @@ jobs:
                 console.log('No pull request found for this commit.');
                 return { labels: [] };
             }
-      - name: Print labels
-        run: echo "${{ steps.get_pr.outputs.labels }}"
+      - name: env
+        run: printenv
+        env:
+          PR_LABELS: ${{ steps.get_pr.outputs.pull-request-labels }}
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+      - name: Get result
+        run: echo "${{steps.get_pr.outputs.result}}"
