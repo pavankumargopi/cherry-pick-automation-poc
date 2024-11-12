@@ -36,4 +36,4 @@ jobs:
             "https://api.github.com/repos/${{ github.repository }}/issues/${PR_NUMBER}/labels" \
             | jq -r '.[].name')
           echo "Labels found: $LABELS"
-          echo "BACKPORT_LABELS=$(echo "$LABELS" | grep -o 'backport-to-.*' || true)" >> $GITHUB_ENV
+          echo "BACKPORT_LABELS=$(echo \"$LABELS\" | grep -o 'backport-to-.*' || true)" >> $GITHUB_ENV
