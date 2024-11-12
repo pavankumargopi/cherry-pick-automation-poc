@@ -1,7 +1,7 @@
 name: Pull Request Backporting using BPer
 
 on: 
-  workflow_dispatch:
+  workflow_call:
     inputs:
       targetBranch:
         description: 'Target branch'
