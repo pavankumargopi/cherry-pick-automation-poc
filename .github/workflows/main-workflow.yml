@@ -23,5 +23,5 @@ jobs:
     uses: ./.github/workflows/configurable-backport.yml  # Reference the reusable workflow file
     with:
       targetBranch: ${{ inputs.targetBranch }}
-      pullRequest: ${{ inputs.targetBranch }}
+      pullRequest: ${{ inputs.pullRequest }}
       dryRun: ${{ inputs.dryRun }}
