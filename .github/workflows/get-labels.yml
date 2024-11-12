@@ -43,4 +43,4 @@ jobs:
       - name: env
         run: printenv
         env:
-          PR_LABELS: ${{ toJson(steps.get_pr.outputs.result) }}
+          PR_LABELS: ${{ steps.get_pr.outputs.result.labels }}
