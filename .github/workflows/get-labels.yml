@@ -24,10 +24,10 @@ jobs:
         with:
           script: |
             const commitHash = process.env.GITHUB_SHA;
-            const { data: pullRequest } = await github.pulls.list({
+            const { data: pullRequest } = await github.pulls.listPullRequestsAssociatedWithCommit({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                head: `${context.repo.owner}:${context.sha}`
+                commit_sha: `${context.sha}`
             });
             if (pullRequest.length > 0) {
                 const pr = pullRequest[0];
