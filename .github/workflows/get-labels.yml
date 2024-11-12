@@ -44,5 +44,3 @@ jobs:
         run: printenv
         env:
           PR_LABELS: ${{ toJson(steps.get_pr.outputs.result) }}
-      - name: Get result
-        run: echo "${{PR_LABELS.labels}}"
